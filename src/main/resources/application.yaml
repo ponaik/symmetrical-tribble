@@ -9,12 +9,6 @@ spring:
   mongodb:
     uri: mongodb://localhost:27017/test
 
-#  liquibase:
-#    change-log: classpath:db/changelog/master.yaml
-#    enabled: false
-#    url: mongodb://localhost:27017/test
-
-
 server:
   port: 8080
 

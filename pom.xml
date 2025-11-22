@@ -18,7 +18,6 @@
 		<java.version>21</java.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <springdoc-openapi-starter-webmvc-ui.version>2.8.14</springdoc-openapi-starter-webmvc-ui.version>
-        <liquibase-mongodb.version>5.0.1</liquibase-mongodb.version>
 
         <sonar-maven-plugin.version>5.2.0.4988</sonar-maven-plugin.version>
         <sonar.organization>microservices-intern</sonar.organization>
@@ -41,15 +40,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-kafka</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-liquibase</artifactId>-->
-<!--		</dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.liquibase.ext</groupId>-->
-<!--            <artifactId>liquibase-mongodb</artifactId>-->
-<!--            <version>${liquibase-mongodb.version}</version>-->
-<!--        </dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
