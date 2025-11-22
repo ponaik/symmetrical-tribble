@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: Payment Service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OAUTH_ISSUER_URI}
+  mongodb:
+    uri: mongodb://localhost:27017/test
+
+#  liquibase:
+#    change-log: classpath:db/changelog/master.yaml
+#    enabled: false
+#    url: mongodb://localhost:27017/test
+
+
+server:
+  port: 8080
+
+swagger-ui:
+  oauth:
+    issuer-uri: ${OAUTH_ISSUER_URI}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
