@@ -1,6 +1,5 @@
 package com.intern.paymentservice.model;
 
-import com.intern.paymentservice.model.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

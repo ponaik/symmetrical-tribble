@@ -2,7 +2,7 @@ package com.intern.paymentservice.controller;
 
 
 import com.intern.paymentservice.model.Payment;
-import com.intern.paymentservice.model.enums.PaymentStatus;
+import com.intern.paymentservice.model.PaymentStatus;
 import com.intern.paymentservice.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

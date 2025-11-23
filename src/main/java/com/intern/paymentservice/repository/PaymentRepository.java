@@ -1,7 +1,7 @@
 package com.intern.paymentservice.repository;
 
 import com.intern.paymentservice.model.Payment;
-import com.intern.paymentservice.model.enums.PaymentStatus;
+import com.intern.paymentservice.model.PaymentStatus;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
