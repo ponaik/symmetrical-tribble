@@ -32,6 +32,10 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public PaymentResponse createPayment(CreatePaymentRequest request) {
         Payment payment = paymentMapper.toEntity(request);
+
+        payment.setStatus(PaymentStatus.PENDING);
+        payment.setTimestamp(Instant.now());
+
         Payment saved = paymentRepository.save(payment);
         return paymentMapper.toResponse(saved);
     }
