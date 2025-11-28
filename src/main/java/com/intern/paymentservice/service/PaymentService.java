@@ -2,6 +2,7 @@ package com.intern.paymentservice.service;
 
 import com.intern.paymentservice.dto.CreatePaymentRequest;
 import com.intern.paymentservice.dto.PaymentResponse;
+import com.intern.paymentservice.model.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -16,7 +17,7 @@ public interface PaymentService {
 
     List<PaymentResponse> findPaymentsByUserId(Long userId);
 
-    List<PaymentResponse> findPaymentsByStatuses(List<String> statuses);
+    List<PaymentResponse> findPaymentsByStatuses(List<PaymentStatus> statuses);
 
     BigDecimal findPaymentTotalForPeriod(Instant start, Instant end);
 }

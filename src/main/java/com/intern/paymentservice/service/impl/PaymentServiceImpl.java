@@ -7,6 +7,7 @@ import com.intern.paymentservice.model.Payment;
 import com.intern.paymentservice.model.PaymentStatus;
 import com.intern.paymentservice.repository.PaymentRepository;
 import com.intern.paymentservice.service.PaymentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
@@ -37,6 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setTimestamp(Instant.now());
 
         Payment saved = paymentRepository.save(payment);
+        log.debug("Persisted Payment object for Payment with id {}", saved.getId());
         return paymentMapper.toResponse(saved);
     }
 
@@ -44,6 +47,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public void deletePayment(String id) {
         paymentRepository.deleteById(id);
+        log.debug("Deleted Payment with id {}", id);
     }
 
     @Override
@@ -63,12 +67,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<PaymentResponse> findPaymentsByStatuses(List<String> statuses) {
-        List<PaymentStatus> statusEnums = statuses.stream()
-                .map(PaymentStatus::valueOf)
-                .collect(Collectors.toList());
-
-        return paymentRepository.findByStatusIn(statusEnums)
+    public List<PaymentResponse> findPaymentsByStatuses(List<PaymentStatus> statuses) {
+        return paymentRepository.findByStatusIn(statuses)
                 .stream()
                 .map(paymentMapper::toResponse)
                 .collect(Collectors.toList());
