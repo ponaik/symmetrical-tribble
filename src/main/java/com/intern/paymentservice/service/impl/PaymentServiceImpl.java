@@ -2,6 +2,8 @@ package com.intern.paymentservice.service.impl;
 
 import com.intern.paymentservice.dto.CreatePaymentRequest;
 import com.intern.paymentservice.dto.PaymentResponse;
+import com.intern.paymentservice.dto.UpdatePaymentStatusRequest;
+import com.intern.paymentservice.exception.PaymentNotFoundException;
 import com.intern.paymentservice.mapper.PaymentMapper;
 import com.intern.paymentservice.model.Payment;
 import com.intern.paymentservice.model.PaymentStatus;
@@ -41,6 +43,19 @@ public class PaymentServiceImpl implements PaymentService {
         Payment saved = paymentRepository.save(payment);
         log.debug("Persisted Payment object for Payment with id {}", saved.getId());
         return paymentMapper.toResponse(saved);
+    }
+
+    @Override
+    @Transactional
+    public PaymentResponse updatePaymentStatus(String id, UpdatePaymentStatusRequest request) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new PaymentNotFoundException(id));
+
+        payment.setStatus(request.status());
+
+        Payment updated = paymentRepository.save(payment);
+        log.debug("Updated Payment status for Payment with id {} to {}", id, request.status());
+        return paymentMapper.toResponse(updated);
     }
 
     @Override

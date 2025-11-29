@@ -2,6 +2,7 @@ package com.intern.paymentservice.service;
 
 import com.intern.paymentservice.dto.CreatePaymentRequest;
 import com.intern.paymentservice.dto.PaymentResponse;
+import com.intern.paymentservice.dto.UpdatePaymentStatusRequest;
 import com.intern.paymentservice.model.PaymentStatus;
 
 import java.math.BigDecimal;
@@ -10,6 +11,8 @@ import java.util.List;
 
 public interface PaymentService {
     PaymentResponse createPayment(CreatePaymentRequest request);
+
+    PaymentResponse updatePaymentStatus(String id, UpdatePaymentStatusRequest request);
 
     void deletePayment(String id);
 

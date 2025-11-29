@@ -1,12 +1,16 @@
-package com.intern.paymentservice.service;
+package com.intern.paymentservice.service.impl;
 
 import com.intern.paymentservice.dto.CreatePaymentRequest;
 import com.intern.paymentservice.dto.PaymentResponse;
+import com.intern.paymentservice.dto.UpdatePaymentStatusRequest;
+import com.intern.paymentservice.exception.PaymentNotFoundException;
 import com.intern.paymentservice.exception.UserAccessDeniedException;
 import com.intern.paymentservice.mapper.PaymentMapper;
 import com.intern.paymentservice.model.Payment;
 import com.intern.paymentservice.model.PaymentStatus;
 import com.intern.paymentservice.repository.PaymentRepository;
+import com.intern.paymentservice.service.AuthenticationService;
+import com.intern.paymentservice.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +22,14 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class PaymentUserService implements PaymentService {
+public class UserPaymentServiceImpl implements PaymentService {
 
     private final AuthenticationService authenticationService;
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
 
     @Autowired
-    public PaymentUserService(AuthenticationService authenticationService, PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
+    public UserPaymentServiceImpl(AuthenticationService authenticationService, PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
         this.authenticationService = authenticationService;
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
@@ -46,6 +50,20 @@ public class PaymentUserService implements PaymentService {
         Payment saved = paymentRepository.save(payment);
         log.debug("Persisted Payment object for Payment with id {} by userId {}", saved.getId(), internalId);
         return paymentMapper.toResponse(saved);
+    }
+
+    @Transactional
+    @Override
+    public PaymentResponse updatePaymentStatus(String id, UpdatePaymentStatusRequest request) {
+        long internalId = authenticationService.getInternalId();
+        Payment payment = paymentRepository.findByIdAndUserId(id, internalId)
+                .orElseThrow(() -> new PaymentNotFoundException(id));
+
+        payment.setStatus(request.status());
+
+        Payment updated = paymentRepository.save(payment);
+        log.debug("Updated Payment status to {} for Payment with id {} by userId {}", request.status(), id, internalId);
+        return paymentMapper.toResponse(updated);
     }
 
     @Override
