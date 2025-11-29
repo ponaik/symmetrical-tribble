@@ -9,7 +9,7 @@ import com.intern.paymentservice.model.PaymentStatus;
 import java.time.Instant;
 import java.util.List;
 
-public interface PaymentService {
+public interface PaymentFacade {
     PaymentResponse createPayment(CreatePaymentRequest request);
 
     PaymentResponse updatePaymentStatus(String id, UpdatePaymentStatusRequest request);

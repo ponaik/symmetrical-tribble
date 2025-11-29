@@ -2,6 +2,7 @@ package com.intern.paymentservice.service.impl;
 
 import com.intern.paymentservice.dto.CreatePaymentRequest;
 import com.intern.paymentservice.dto.PaymentResponse;
+import com.intern.paymentservice.dto.PaymentTotalResponse;
 import com.intern.paymentservice.dto.UpdatePaymentStatusRequest;
 import com.intern.paymentservice.exception.PaymentNotFoundException;
 import com.intern.paymentservice.exception.UserAccessDeniedException;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -111,8 +111,8 @@ public class UserPaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public BigDecimal findPaymentTotalForPeriod(Instant start, Instant end) {
+    public PaymentTotalResponse findPaymentTotalForPeriod(Instant start, Instant end) {
         long internalId = authenticationService.getInternalId();
-        return paymentRepository.findPaymentTotalForPeriodAndUserId(start, end, internalId);
+        return new PaymentTotalResponse(paymentRepository.findPaymentTotalForPeriodAndUserId(start, end, internalId));
     }
 }
