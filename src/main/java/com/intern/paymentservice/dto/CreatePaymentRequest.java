@@ -8,14 +8,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public record CreatePaymentRequest(
-        @NotNull
-        @Positive
+        @NotNull(message = "Order ID must be provided")
+        @Positive(message = "Order ID must be a positive number")
         Long orderId,
 
-        @Positive
+        @Positive(message = "User ID must be a positive number")
         Long userId,
 
-        @NotNull
-        @PositiveOrZero
+        @NotNull(message = "Payment amount must be provided")
+        @PositiveOrZero(message = "Payment amount must be zero or a positive number")
         BigDecimal paymentAmount
 ) implements Serializable {}
