@@ -1,6 +1,5 @@
 package com.intern.paymentservice.service.impl;
 
-import com.intern.paymentservice.client.DecisionClient;
 import com.intern.paymentservice.dto.CreatePaymentRequest;
 import com.intern.paymentservice.dto.PaymentResponse;
 import com.intern.paymentservice.dto.PaymentTotalResponse;
@@ -22,25 +21,18 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     private final PaymentService paymentService;
     private final PaymentProducer paymentProducer;
-    private final DecisionClient decisionClient;
 
     @Autowired
-    public PaymentFacadeImpl(PaymentService paymentService, PaymentProducer paymentProducer, DecisionClient decisionClient) {
+    public PaymentFacadeImpl(PaymentService paymentService, PaymentProducer paymentProducer) {
         this.paymentService = paymentService;
         this.paymentProducer = paymentProducer;
-        this.decisionClient = decisionClient;
     }
 
     @Override
     public PaymentResponse createPayment(CreatePaymentRequest request) {
         PaymentResponse response = paymentService.createPayment(request);
         paymentProducer.sendPaymentResponse(response);
-
-        // Simulate payment
-        Integer paymentDecision = decisionClient.getPaymentDecision();
-        PaymentStatus newStatus = (paymentDecision % 2 == 0) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
-        updatePaymentStatus(response.id(), new UpdatePaymentStatusRequest(newStatus));
-
+        
         return response;
     }
 
