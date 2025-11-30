@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/totallyLegitDecisionApi")
-public class PaymentDecisionController {
+public class PaymentResultController {
 
     @GetMapping
     public int generateRandomNumber() {

@@ -6,17 +6,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class DecisionClient {
+public class PaymentResultClient {
 
     private final WebClient webClient;
 
-    public DecisionClient(
+    public PaymentResultClient(
             @Value("${server.port}") String port,
             WebClient.Builder builder) {
         this.webClient = builder.baseUrl("http://localhost:" + port).build();
     }
 
-    public Integer getPaymentDecision() {
+    public Integer getPaymentResult() {
         return webClient.get()
                 .uri("/totallyLegitDecisionApi")
                 .accept(MediaType.APPLICATION_JSON)
