@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Payment Service
+    name: PaymentService
   security:
     oauth2:
       resourceserver:
@@ -15,11 +15,16 @@ spring:
       group-id: ${spring.application.name}
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.deserializer.value.error.handler.behavior: log
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.intern.paymentservice.dto.CreatePaymentRequest
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    dead-letter-topic: ${spring.application.name}-DLT
 
 server:
   port: 8080
@@ -36,4 +41,6 @@ management:
 
 logging:
   level:
+    root: INFO
     com.intern.paymentservice: DEBUG
+    org.springframework.kafka.listener.DefaultErrorHandler: DEBUG

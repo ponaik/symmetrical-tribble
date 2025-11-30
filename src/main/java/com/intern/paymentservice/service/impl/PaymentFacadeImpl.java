@@ -34,7 +34,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentResponse createPayment(CreatePaymentRequest request) {
         PaymentResponse response = paymentService.createPayment(request);
-        paymentProducer.sendPaymentResponse(response);
+        paymentProducer.sendPaymentUpdate(response);
 
         // Simulate payment
         Integer paymentDecision = decisionClient.getPaymentDecision();
