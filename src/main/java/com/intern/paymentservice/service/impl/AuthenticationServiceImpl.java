@@ -2,15 +2,20 @@ package com.intern.paymentservice.service.impl;
 
 import com.intern.paymentservice.service.AuthenticationService;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
 @Service
+@Slf4j
 @NoArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -58,5 +63,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return authentication.getAuthorities().stream()
                 .anyMatch(authority -> Objects.equals(authority.getAuthority(), USER));
+    }
+
+    @Override
+    public void setBrokerAuthenticationInContext() {
+        UsernamePasswordAuthenticationToken dummyAuth = new UsernamePasswordAuthenticationToken(
+                "kafka-system",
+                null,
+                Collections.singletonList(new SimpleGrantedAuthority(ADMIN))
+        );
+        SecurityContextHolder.getContext().setAuthentication(dummyAuth);
+        log.debug("Set authentication in security context with admin role for broker operations.");
     }
 }

@@ -9,4 +9,6 @@ public interface AuthenticationService {
     boolean isAdmin();
 
     boolean isUser();
+
+    void setBrokerAuthenticationInContext();
 }
