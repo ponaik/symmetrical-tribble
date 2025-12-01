@@ -1,4 +1,4 @@
-package com.intern.paymentservice.service.impl.unit;
+package com.intern.paymentservice.unit.service.impl;
 
 import com.intern.paymentservice.service.impl.AuthenticationServiceImpl;
 import org.junit.jupiter.api.AfterEach;

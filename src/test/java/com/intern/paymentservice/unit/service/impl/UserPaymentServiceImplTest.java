@@ -1,4 +1,4 @@
-package com.intern.paymentservice.service.impl.unit;
+package com.intern.paymentservice.unit.service.impl;
 
 import com.intern.paymentservice.dto.CreatePaymentRequest;
 import com.intern.paymentservice.dto.PaymentResponse;
