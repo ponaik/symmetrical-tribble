@@ -1,7 +1,8 @@
-package com.intern.paymentservice.service.integration;
+package com.intern.paymentservice.integration;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -12,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class NoSecurityConfig {
 
     @Bean
+    @Primary
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
@@ -21,6 +23,7 @@ public class NoSecurityConfig {
     }
 
     @Bean
+    @Primary
     public JwtDecoder jwtDecoder() {
         return token -> Jwt.withTokenValue("dummy")
                 .header("alg", "none")
