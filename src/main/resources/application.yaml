@@ -26,6 +26,10 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
     dead-letter-topic: ${spring.application.name}-DLT
 
+mongock:
+  migration-scan-package:
+    com.intern.paymentservice.migration
+
 server:
   port: 8080
 
