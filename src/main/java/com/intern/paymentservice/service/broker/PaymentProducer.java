@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @NullMarked
 public class PaymentProducer {
 
-    private final KafkaTemplate<String, PaymentResponse> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Autowired
-    public PaymentProducer(KafkaTemplate<String, PaymentResponse> kafkaTemplate) {
+    public PaymentProducer(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
