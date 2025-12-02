@@ -3,6 +3,7 @@ package com.intern.paymentservice.integration.service;
 import com.intern.paymentservice.PaymentServiceApplication;
 import com.intern.paymentservice.TestcontainersConfiguration;
 import com.intern.paymentservice.client.PaymentResultClient;
+import com.intern.paymentservice.dto.CreatePaymentRequest;
 import com.intern.paymentservice.dto.PaymentResponse;
 import com.intern.paymentservice.dto.PaymentTotalResponse;
 import com.intern.paymentservice.dto.UpdatePaymentStatusRequest;
@@ -58,6 +59,28 @@ class PaymentFacadeAdminFlowIntegrationTest {
         given(paymentResultClient.getPaymentResult()).willReturn(200);
 
         doNothing().when(paymentProducer).sendPaymentUpdate(any());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {ADMIN})
+    void givenAdminUser_whenCreatePayment_thenPaymentIsPersistedAndStatusIsUpdated() {
+        // given
+        Long orderId = 101L;
+        Long userId = 1001L;
+        CreatePaymentRequest request = new CreatePaymentRequest(orderId, userId, BigDecimal.valueOf(100.00));
+
+        // when
+        PaymentResponse response = paymentFacade.createPayment(request);
+
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.orderId()).isEqualTo(orderId);
+        assertThat(response.status()).isEqualTo(PaymentStatus.PENDING);
+
+        // Verify Persistence
+        Optional<Payment> saved = paymentRepository.findById(response.id());
+        assertThat(saved).isPresent();
+        assertThat(saved.get().getStatus()).isEqualTo(PaymentStatus.SUCCESS);
     }
 
     @Test
