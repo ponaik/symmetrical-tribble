@@ -38,7 +38,7 @@ jobs:
             -Dsonar.host.url=${SONAR_HOST_URL} \
             -Dsonar.organization=${SONAR_ORGANIZATION} \
             -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-            -Dsonar.token=${SONAR_TOKEN} \
+            -Dsonar.login=${SONAR_TOKEN} \
             -Dsonar.verbose=true
 
       - name: Package application
