@@ -7,8 +7,8 @@ import com.intern.paymentservice.dto.UpdatePaymentStatusRequest;
 import com.intern.paymentservice.model.PaymentStatus;
 import com.intern.paymentservice.service.AuthenticationService;
 import com.intern.paymentservice.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,18 +21,12 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @Slf4j
 @Service
 @Primary
+@RequiredArgsConstructor
 public class PaymentAuthorizationDecorator implements PaymentService {
 
     private final AuthenticationService authenticationService;
     private final PaymentService paymentServiceImpl; // Admin implementation
     private final PaymentService userPaymentServiceImpl; // User implementation
-
-    @Autowired
-    public PaymentAuthorizationDecorator(AuthenticationService authenticationService, PaymentService paymentServiceImpl, PaymentService userPaymentServiceImpl) {
-        this.authenticationService = authenticationService;
-        this.paymentServiceImpl = paymentServiceImpl;
-        this.userPaymentServiceImpl = userPaymentServiceImpl;
-    }
 
     private PaymentService getDelegate() {
         if (authenticationService.isAdmin()) {

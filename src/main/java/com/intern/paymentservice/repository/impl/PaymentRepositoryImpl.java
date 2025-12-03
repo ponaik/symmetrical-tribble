@@ -2,8 +2,8 @@ package com.intern.paymentservice.repository.impl;
 
 import com.intern.paymentservice.repository.PaymentAggregationRepository;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -16,14 +16,10 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Repository
+@RequiredArgsConstructor
 public class PaymentRepositoryImpl implements PaymentAggregationRepository {
 
     private final MongoTemplate mongoTemplate;
-
-    @Autowired
-    public PaymentRepositoryImpl(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
-    }
 
     @Override
     public BigDecimal findPaymentTotalForPeriod(Instant start, Instant end) {

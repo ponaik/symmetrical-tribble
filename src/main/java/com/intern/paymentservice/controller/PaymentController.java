@@ -9,8 +9,8 @@ import com.intern.paymentservice.service.PaymentFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,14 +24,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/payments")
 @Validated
+@RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentFacade paymentFacade;
-
-    @Autowired
-    public PaymentController(PaymentFacade paymentFacade) {
-        this.paymentFacade = paymentFacade;
-    }
 
     /**
      * Creates a new payment.

@@ -9,8 +9,8 @@ import com.intern.paymentservice.model.PaymentStatus;
 import com.intern.paymentservice.service.PaymentFacade;
 import com.intern.paymentservice.service.PaymentService;
 import com.intern.paymentservice.service.broker.PaymentProducer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -18,18 +18,12 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PaymentFacadeImpl implements PaymentFacade {
 
     private final PaymentService paymentService;
     private final PaymentProducer paymentProducer;
     private final PaymentResultClient paymentResultClient;
-
-    @Autowired
-    public PaymentFacadeImpl(PaymentService paymentService, PaymentProducer paymentProducer, PaymentResultClient paymentResultClient) {
-        this.paymentService = paymentService;
-        this.paymentProducer = paymentProducer;
-        this.paymentResultClient = paymentResultClient;
-    }
 
     @Override
     public PaymentResponse createPayment(CreatePaymentRequest request) {

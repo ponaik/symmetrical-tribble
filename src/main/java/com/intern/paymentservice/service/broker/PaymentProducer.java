@@ -1,23 +1,19 @@
 package com.intern.paymentservice.service.broker;
 
 import com.intern.paymentservice.dto.PaymentResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 @NullMarked
+@RequiredArgsConstructor
 public class PaymentProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
-
-    @Autowired
-    public PaymentProducer(KafkaTemplate<String, Object> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
 
     public void sendPaymentUpdate(PaymentResponse response) {
         kafkaTemplate.send("UPDATE_PAYMENT", response.orderId().toString(), response);

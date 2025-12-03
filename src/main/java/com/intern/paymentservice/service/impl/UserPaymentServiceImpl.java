@@ -12,8 +12,8 @@ import com.intern.paymentservice.model.PaymentStatus;
 import com.intern.paymentservice.repository.PaymentRepository;
 import com.intern.paymentservice.service.AuthenticationService;
 import com.intern.paymentservice.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +22,12 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserPaymentServiceImpl implements PaymentService {
 
     private final AuthenticationService authenticationService;
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
-
-    @Autowired
-    public UserPaymentServiceImpl(AuthenticationService authenticationService, PaymentRepository paymentRepository, PaymentMapper paymentMapper) {
-        this.authenticationService = authenticationService;
-        this.paymentRepository = paymentRepository;
-        this.paymentMapper = paymentMapper;
-    }
 
     @Override
     @Transactional
