@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
+@TestPropertySource(properties = {"mongock.enabled=false"})
 @DataMongoTest
 @Import(TestcontainersConfiguration.class)
 @Tag("integration")
