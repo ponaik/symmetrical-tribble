@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.intern</groupId>
 	<artifactId>paymentservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>Payment Service</name>
 	<description>Payment Service REST API microservice using mongodb and kafka</description>
 

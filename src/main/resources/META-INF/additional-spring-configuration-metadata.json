@@ -1,7 +1,7 @@
 {
   "properties": [
     {
-      "name": "swagger-ui.oauth.issuer-uri",
+      "name": "openapi.oauth.issuer-uri",
       "type": "java.lang.String",
       "description": "Description for swagger-ui.oauth.issuer-uri."
     },

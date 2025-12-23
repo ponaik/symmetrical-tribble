@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.security.OAuthFlow;
 import io.swagger.v3.oas.models.security.OAuthFlows;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +15,12 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("!test")
-public class SwaggerConfig {
+public class OpenApiConfig {
 
     @Bean
-    public OpenAPI customOpenAPI(@Value("${swagger-ui.oauth.issuer-uri}") String oauthIssuerUri) {
+    public OpenAPI customOpenAPI(@Value("${openapi.oauth.issuer-uri}") String oauthIssuerUri) {
         return new OpenAPI()
+                .addServersItem(new Server().url("/").description("Default Gateway Server"))
                 .info(new Info()
                         .title("Order Service")
                         .version("0.0.1-SNAPSHOT"))
