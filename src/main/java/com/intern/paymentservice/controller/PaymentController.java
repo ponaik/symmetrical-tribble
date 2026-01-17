@@ -29,27 +29,20 @@ public class PaymentController {
 
     private final PaymentFacade paymentFacade;
 
-    /**
-     * Creates a new payment.
-     * Maps to POST /api/payments
-     * @param request The payment creation request body.
-     * @return 201 Created with the created PaymentResponse.
-     */
-    @Operation(summary = "Create a new payment")
+    @Operation(
+            summary = "Create a new payment",
+            description = "Initiates a payment. Users can only create payments for their own IDs; admins can create payments for any user."
+    )
     @PostMapping
     public ResponseEntity<PaymentResponse> createPayment(@Valid @RequestBody CreatePaymentRequest request) {
         PaymentResponse response = paymentFacade.createPayment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /**
-     * Updates the status of an existing payment.
-     * Maps to PATCH /api/payments/{id}/status
-     * @param id The ID of the payment.
-     * @param request The status update request body.
-     * @return 200 OK with the updated PaymentResponse.
-     */
-    @Operation(summary = "Update the status of an existing payment")
+    @Operation(
+            summary = "Update payment status",
+            description = "Updates a payment's status. Users are restricted to their own payments; admins have global update authority."
+    )
     @PatchMapping("/{id}/status")
     public ResponseEntity<PaymentResponse> updatePaymentStatus(
             @PathVariable String id,
@@ -58,66 +51,50 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Deletes a payment by its ID.
-     * Maps to DELETE /api/payments/{id}
-     * @param id The ID of the payment to delete.
-     * @return 204 No Content.
-     */
-    @Operation(summary = "Delete a payment")
+    @Operation(
+            summary = "Delete a payment",
+            description = "Permanently removes a payment record. Users can only delete their own payments; admins can delete any record."
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable String id) {
         paymentFacade.deletePayment(id);
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Finds payments associated with a specific order ID.
-     * Maps to GET /api/payments/by-order?orderId={orderId}
-     * @param orderId The ID of the order.
-     * @return 200 OK with a list of payments.
-     */
-    @Operation(summary = "Find payments by order ID")
+    @Operation(
+            summary = "Find payments by order ID",
+            description = "Retrieves payments for a specific order. Users see only their associated records; admins see all records for the order."
+    )
     @GetMapping("/by-order")
     public ResponseEntity<List<PaymentResponse>> findPaymentsByOrderId(@RequestParam Long orderId) {
         List<PaymentResponse> payments = paymentFacade.findPaymentsByOrderId(orderId);
         return ResponseEntity.ok(payments);
     }
 
-    /**
-     * Finds payments associated with a specific user ID.
-     * Maps to GET /api/payments/by-user?userId={userId}
-     * @param userId The ID of the user.
-     * @return 200 OK with a list of payments.
-     */
-    @Operation(summary = "Find payments by user ID")
+    @Operation(
+            summary = "Find payments by user ID",
+            description = "Lists payments for a user. Standard users must provide their own ID; admins can query any user's ID."
+    )
     @GetMapping("/by-user")
     public ResponseEntity<List<PaymentResponse>> findPaymentsByUserId(@RequestParam Long userId) {
         List<PaymentResponse> payments = paymentFacade.findPaymentsByUserId(userId);
         return ResponseEntity.ok(payments);
     }
 
-    /**
-     * Finds payments matching a list of statuses.
-     * Maps to GET /api/payments/by-status?statuses=COMPLETED,PENDING
-     * @param statuses A list of payment statuses to filter by.
-     * @return 200 OK with a list of payments.
-     */
-    @Operation(summary = "Find payments by one or more statuses")
+    @Operation(
+            summary = "Find payments by status",
+            description = "Filters payments by status. Users receive their matching records; admins receive all system-wide matching records."
+    )
     @GetMapping("/by-status")
     public ResponseEntity<List<PaymentResponse>> findPaymentsByStatuses(@RequestParam List<PaymentStatus> statuses) {
         List<PaymentResponse> payments = paymentFacade.findPaymentsByStatuses(statuses);
         return ResponseEntity.ok(payments);
     }
 
-    /**
-     * Calculates the total payment amount for a given time period.
-     * Maps to GET /api/payments/total?start={start}&end={end}
-     * @param start The start timestamp of the period (ISO format).
-     * @param end The end timestamp of the period (ISO format).
-     * @return 200 OK with the total BigDecimal amount.
-     */
-    @Operation(summary = "Calculate total payment amount for a period")
+    @Operation(
+            summary = "Calculate payment total",
+            description = "Aggregates payment amounts for a period. Users see their personal total; admins see the total system revenue."
+    )
     @GetMapping("/total")
     public ResponseEntity<PaymentTotalResponse> findPaymentTotalForPeriod(
             @RequestParam Instant start,
