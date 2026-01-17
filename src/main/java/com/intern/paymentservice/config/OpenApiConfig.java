@@ -22,8 +22,8 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .addServersItem(new Server().url("/").description("Default Gateway Server"))
                 .info(new Info()
-                        .title("Order Service")
-                        .version("0.0.1-SNAPSHOT"))
+                        .title("Payment Service")
+                        .version("1.0.2"))
                 .addSecurityItem(new SecurityRequirement().addList("OAuth2Scheme"))
                 .components(new Components()
                         .addSecuritySchemes("OAuth2Scheme",
