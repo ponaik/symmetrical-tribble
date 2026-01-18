@@ -1,24 +1,39 @@
 spring:
   application:
-    name: Payment Service
+    name: PaymentService
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: ${OAUTH_ISSUER_URI}
   mongodb:
-    uri: mongodb://localhost:27017/test
+    uri: mongodb://localhost:27017/payments
 
-#  liquibase:
-#    change-log: classpath:db/changelog/master.yaml
-#    enabled: false
-#    url: mongodb://localhost:27017/test
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id: ${spring.application.name}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+        spring.deserializer.value.error.handler.behavior: log
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.intern.paymentservice.dto.CreatePaymentRequest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+    dead-letter-topic: ${spring.application.name}-DLT
 
+mongock:
+  migration-scan-package:
+    com.intern.paymentservice.migration
 
 server:
   port: 8080
 
-swagger-ui:
+openapi:
   oauth:
     issuer-uri: ${OAUTH_ISSUER_URI}
 
@@ -27,3 +42,9 @@ management:
     web:
       exposure:
         include: "*"
+
+logging:
+  level:
+    root: INFO
+    com.intern.paymentservice: DEBUG
+    org.springframework.kafka.listener.DefaultErrorHandler: DEBUG
