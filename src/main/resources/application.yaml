@@ -38,12 +38,34 @@ openapi:
     issuer-uri: ${OAUTH_ISSUER_URI}
 
 management:
+  tracing:
+    sampling:
+      probability: 1.0
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "health,info,prometheus"
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+  otlp:
+    metrics:
+      export:
+        url: "http://localhost:4318/v1/metrics"
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: "http://localhost:4318/v1/traces"
+    logging:
+      export:
+        otlp:
+          endpoint: "http://localhost:4318/v1/logs"
 
 logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{traceId:-},%X{spanId:-}]"
   level:
     root: INFO
     com.intern.paymentservice: DEBUG

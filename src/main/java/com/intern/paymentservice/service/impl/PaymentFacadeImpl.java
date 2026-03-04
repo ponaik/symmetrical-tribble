@@ -9,6 +9,9 @@ import com.intern.paymentservice.model.PaymentStatus;
 import com.intern.paymentservice.service.PaymentFacade;
 import com.intern.paymentservice.service.PaymentService;
 import com.intern.paymentservice.service.broker.PaymentProducer;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,48 +28,66 @@ public class PaymentFacadeImpl implements PaymentFacade {
     private final PaymentProducer paymentProducer;
     private final PaymentResultClient paymentResultClient;
 
+    private final ObservationRegistry observationRegistry;
+
     @Override
     public PaymentResponse createPayment(CreatePaymentRequest request) {
-        PaymentResponse response = paymentService.createPayment(request);
-        paymentProducer.sendPaymentUpdate(response);
+        return Observation.createNotStarted("payment.create", observationRegistry)
+                .contextualName("processing-payment-order")
+                .highCardinalityKeyValue("order.id", String.valueOf(request.orderId()))
+                .highCardinalityKeyValue("user.id", String.valueOf(request.userId()))
+                .observe(() -> {
+                    PaymentResponse response = paymentService.createPayment(request);
+                    paymentProducer.sendPaymentUpdate(response);
 
-        // Simulate payment
-        Integer paymentResult = paymentResultClient.getPaymentResult();
-        PaymentStatus newStatus = (paymentResult % 2 == 0) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
-        updatePaymentStatus(response.id(), new UpdatePaymentStatusRequest(newStatus));
+                    // Simulate payment
+                    Integer paymentResult = paymentResultClient.getPaymentResult();
+                    PaymentStatus newStatus = (paymentResult % 2 == 0) ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
+                    updatePaymentStatus(response.id(), new UpdatePaymentStatusRequest(newStatus));
 
-        return response;
+                    return response;
+                });
     }
 
     @Override
     public PaymentResponse updatePaymentStatus(String id, UpdatePaymentStatusRequest request) {
-        PaymentResponse response = paymentService.updatePaymentStatus(id, request);
-        paymentProducer.sendPaymentUpdate(response);
+        return Observation.createNotStarted("payment.update", observationRegistry)
+                .contextualName("updating-payment-status")
+                .highCardinalityKeyValue("payment.id", id)
+                .observe(() -> {
+                    PaymentResponse response = paymentService.updatePaymentStatus(id, request);
+                    paymentProducer.sendPaymentUpdate(response);
 
-        return response;
+                    return response;
+                });
     }
 
     @Override
+    @Observed(name = "payment.delete")
     public void deletePayment(String id) {
         paymentService.deletePayment(id);
     }
 
     @Override
+    @Observed(name = "payment.find.byOrderId")
     public List<PaymentResponse> findPaymentsByOrderId(Long orderId) {
         return paymentService.findPaymentsByOrderId(orderId);
     }
 
     @Override
+    @Observed(name = "payment.find.byUserId")
     public List<PaymentResponse> findPaymentsByUserId(Long userId) {
         return paymentService.findPaymentsByUserId(userId);
     }
 
     @Override
+    @Observed(name = "payment.find.byStatuses")
     public List<PaymentResponse> findPaymentsByStatuses(List<PaymentStatus> statuses) {
         return paymentService.findPaymentsByStatuses(statuses);
     }
 
     @Override
+    @Observed(name = "paymentTotal.find.forPeriod")
     public PaymentTotalResponse findPaymentTotalForPeriod(Instant start, Instant end) {
         return paymentService.findPaymentTotalForPeriod(start, end);
     }
