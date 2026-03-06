@@ -11,7 +11,6 @@ import com.intern.paymentservice.service.PaymentService;
 import com.intern.paymentservice.service.broker.PaymentProducer;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
-import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -63,31 +62,26 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    @Observed(name = "payment.delete")
     public void deletePayment(String id) {
         paymentService.deletePayment(id);
     }
 
     @Override
-    @Observed(name = "payment.find.byOrderId")
     public List<PaymentResponse> findPaymentsByOrderId(Long orderId) {
         return paymentService.findPaymentsByOrderId(orderId);
     }
 
     @Override
-    @Observed(name = "payment.find.byUserId")
     public List<PaymentResponse> findPaymentsByUserId(Long userId) {
         return paymentService.findPaymentsByUserId(userId);
     }
 
     @Override
-    @Observed(name = "payment.find.byStatuses")
     public List<PaymentResponse> findPaymentsByStatuses(List<PaymentStatus> statuses) {
         return paymentService.findPaymentsByStatuses(statuses);
     }
 
     @Override
-    @Observed(name = "paymentTotal.find.forPeriod")
     public PaymentTotalResponse findPaymentTotalForPeriod(Instant start, Instant end) {
         return paymentService.findPaymentTotalForPeriod(start, end);
     }
